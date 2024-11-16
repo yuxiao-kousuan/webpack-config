@@ -1,0 +1,22 @@
+{
+  "name": "webpack-config",
+  "version": "1.0.0",
+  "description": "wenbpack基础配置",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "css-loader": "^7.1.2",
+    "install": "^0.13.0",
+    "less": "^4.2.0",
+    "less-loader": "^12.2.0",
+    "npm": "^10.9.0",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4"
+  }
+}
