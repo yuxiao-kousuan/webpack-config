@@ -1,5 +1,4 @@
-const path = require("path")
-const ESLintPlugin = require('eslint-webpack-plugin'); // 所有的插件都需要引入
+const path = require("path");
 
 module.exports = {
     entry: './src/main.js', //入口文件喜欢使用相对路径
@@ -62,10 +61,6 @@ module.exports = {
     },
     // 插件
     plugins: [
-        new ESLintPlugin({
-            // 检查哪些文件
-            context: path.resolve(__dirname, "src")
-        })
     ],
     //模式
     mode: "development"

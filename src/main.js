@@ -6,4 +6,4 @@ import './css/iconfont.css'
 
 console.log(increase(1, 2));
 
-var a = 1;
+// var a = 1;
