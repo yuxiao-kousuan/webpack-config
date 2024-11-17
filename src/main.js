@@ -5,5 +5,3 @@ import './sass/index.scss';
 import './css/iconfont.css'
 
 console.log(increase(1, 2));
-
-// var a = 1;
