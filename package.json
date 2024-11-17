@@ -11,10 +11,14 @@
   "license": "ISC",
   "devDependencies": {
     "css-loader": "^7.1.2",
+    "eslint": "^9.15.0",
+    "eslint-webpack-plugin": "^4.2.0",
     "install": "^0.13.0",
     "less": "^4.2.0",
     "less-loader": "^12.2.0",
     "npm": "^10.9.0",
+    "sass": "^1.81.0",
+    "sass-loader": "^16.0.3",
     "style-loader": "^4.0.0",
     "webpack": "^5.96.1",
     "webpack-cli": "^5.1.4"
