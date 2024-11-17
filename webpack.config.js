@@ -1,4 +1,5 @@
 const path = require("path");
+const paths = require('./path');
 const ESLintPlugin = require("eslint-webpack-plugin");
 
 module.exports = {
@@ -63,7 +64,18 @@ module.exports = {
     // 插件
     plugins: [
         new ESLintPlugin({
-            context: path.resolve(__dirname, "src")
+            // 指定生效范围
+            context: path.resolve(__dirname, "src"),
+            // 指定检查的文件
+            extensions: ['js', 'mjs', 'jsx', 'ts', 'tsx'],
+            // 使用 react-dev-utils 提供的格式化工具，将 ESLint 输出美化，便于开发者阅读。
+            formatter: require.resolve('react-dev-utils/eslintFormatter'),
+            // 遇到错误是否终止构建
+            failOnError: true,
+            // ESLint 会缓存结果，避免重复检查未更改的文件。
+            cache: true,
+            // 指定缓存的位置
+            cacheLocation: path.resolve(paths.appNodeModules, '.cache/.eslintcache')
         })
     ],
     //模式
