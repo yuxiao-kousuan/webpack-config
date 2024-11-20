@@ -1,12 +1,13 @@
 const path = require("path");
-const paths = require('./path');
+const paths = require('../path');
 const ESLintPlugin = require("eslint-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: './src/main.js', //入口文件喜欢使用相对路径
     output: {
         // path: path.resolve(__dirname, 'dist') 是指当前文件夹的目录下 新建一个dist文件夹
-        path: path.resolve(__dirname, 'dist'), // 这里喜欢使用绝对路径
+        path: path.resolve(__dirname, '../dist'), // 这里喜欢使用绝对路径
         //入口文件打包输出的文件名
         filename: 'static/js/main.js',
         clean: true  // 打包前将path目录清空
@@ -58,14 +59,24 @@ module.exports = {
                     // hash 文件内容生成唯一id 并制定hash位数, ext: 扩展名， query: url中携带其他参数
                     filename: "static/media/[hash:10][ext][query]"
                 }
-            }
+            },
+            {
+                test: /\.m?js$/,
+                exclude: /node_modules/, //排除那些文件不处理
+                use: {
+                  loader: 'babel-loader',
+                  options: {
+                    presets: ['@babel/preset-env'],  // 这就是预设，也可以在babel.config.js中写 可以编译es6语法
+                  },
+                },
+            },
         ]
     },
     // 插件
     plugins: [
         new ESLintPlugin({
             // 指定生效范围
-            context: path.resolve(__dirname, "src"),
+            context: path.resolve(__dirname, "../src"),
             // 指定检查的文件
             extensions: ['js', 'mjs', 'jsx', 'ts', 'tsx'],
             // 使用 react-dev-utils 提供的格式化工具，将 ESLint 输出美化，便于开发者阅读。
@@ -76,8 +87,12 @@ module.exports = {
             cache: true,
             // 指定缓存的位置
             cacheLocation: path.resolve(paths.appNodeModules, '.cache/.eslintcache')
+        }),
+        new HtmlWebpackPlugin({
+            // 以public/index.html文件为模版创建新的html文件： 1.结构和原来一致  2.自动引入打包输出的资源
+            template: path.resolve(__dirname, "../public/index.html")
         })
     ],
     //模式
-    mode: "development"
+    mode: "production"
 }

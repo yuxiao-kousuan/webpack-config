@@ -93,6 +93,71 @@ Eslink
 
 eslint, 专门做语言质量检查。js ts vue，都能支持语言校验
 
+-------------------------------------------------------------------------
+### Babel 语法
+
+作用： 将es6高级的语法，编译为低版本语法，例如es5语法，这样可以运行在旧版本的浏览器中
+
+1.presets预设：就是一组Babel插件，用于扩展Babel功能： 
+1. @babel/preset-env: 一个智能预设，允许使用最新的js
+2. @babel/preset-react: 允许使用jsx语法
+3. @babel/preset-typescript: 用来编译TypeScript语法的预设
+
+npm install -D babel-loader @babel/core @babel/preset-env
+
+----------------------------------------
+### 处理html资源
+现状： 需要手动引入js资源文件
+希望自动引入打包的文件
+
+npm install --save-dev html-webpack-plugin
+
+引入插件plugin
+
+此时打包的文件中，会包含一个html文件，并且自用引入main.js文件；
+
+但是需要保留之前结构
+
+-----------------------------------
+### 热更新
+
+npm install webpack-dev-server -D 开发环境的热更新
+
+    devServer: {
+        host: "localhost", //服务器域名
+        port: "3000",
+        open: true  //是否自动打开浏览器
+    },
+
+配置上述参数后，指令直接修改为 npx webpack serve
+
+之后会自动监听，文件，就会出现热更新
+
+此时只会在内存中编译打包了，不会输出新的打包文件；
+
+### 搭建生产模式
+目的： 
+1. 优化代码运行性能
+2. 优化代码打包速度
+
+新建一个生产环境的配置文件,同时将文件移入 config文件中
+运行开发环境配置文件： npx webpack serve --config ./config/webpack.dev.js
+运行生产模式文件： npx webpack --config ./config/webpack.prod.js
+
+考虑分别运行上述命令比较麻烦，可以在webpack中简单运行配置命令：
+
+
+
+ 
+
+
+
+
+
+
+
+
+
 
 
 

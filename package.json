@@ -4,14 +4,20 @@
   "description": "wenbpack基础配置",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm run dev",
+    "dev": "webpack serve --config ./config/webpack.dev.js",
+    "build": "webpack --config ./config/webpack.prod.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "babel-loader": "^9.2.1",
     "css-loader": "^7.1.2",
     "eslint": "^8.50.0",
+    "html-webpack-plugin": "^5.6.3",
     "install": "^0.13.0",
     "less": "^4.2.0",
     "less-loader": "^12.2.0",
@@ -21,7 +27,8 @@
     "sass-loader": "^16.0.3",
     "style-loader": "^4.0.0",
     "webpack": "^5.96.1",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.1.0"
   },
   "dependencies": {
     "eslint-webpack-plugin": "^4.2.0"
