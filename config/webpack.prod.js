@@ -2,6 +2,27 @@ const path = require("path");
 const paths = require('../path');
 const ESLintPlugin = require("eslint-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+
+// 用来获取样式的loader
+function geStyleLoader(otherLoader = []) {
+    return [
+        MiniCssExtractPlugin.loader,
+        "css-loader",
+        {   
+            loader: "postcss-loader",
+            options: {
+                postcssOptions: {
+                    plugins: [
+                        "postcss-preset-env" //解决大部分样式的兼容性问题
+                    ]
+                }
+            }
+        },
+        ...otherLoader
+    ].filter(Boolean);
+}
 
 module.exports = {
     entry: './src/main.js', //入口文件喜欢使用相对路径
@@ -18,26 +39,19 @@ module.exports = {
             // 各种loader的配置
             {
                 test: /\.css$/,
-                use: [
-                    "style-loader",
-                    "css-loader",
-                ], //执行顺序从右到左 从下到上 与常理相反
+                use: geStyleLoader(), //执行顺序从右到左 从下到上 与常理相反
             },
             {
                 test: /\.less$/,
-                use: [
-                    "style-loader",
-                    "css-loader",
-                    "less-loader"
-                ],
+                use: geStyleLoader(["less-loader"]),
             },
             {
                 test: /\.s[ac]ss$/,
-                use: [
-                    "style-loader",
-                    "css-loader",
-                    "sass-loader"
-                ],
+                use: geStyleLoader(["sass-loader"]),
+            },
+            {
+                test: /\.styl$/,
+                use: geStyleLoader(["stylus-loader"]),
             },
             {
                 test: /\.(png|jpe?g|gif|web|svg)$/,
@@ -91,8 +105,13 @@ module.exports = {
         new HtmlWebpackPlugin({
             // 以public/index.html文件为模版创建新的html文件： 1.结构和原来一致  2.自动引入打包输出的资源
             template: path.resolve(__dirname, "../public/index.html")
-        })
+        }),
+        new MiniCssExtractPlugin({
+            filename: "static/css/main.css"
+        }),
+        new CssMinimizerPlugin()
     ],
     //模式
-    mode: "production"
+    mode: "production",
+    devtool: "source-map"
 }

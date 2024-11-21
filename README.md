@@ -146,6 +146,108 @@ npm install webpack-dev-server -D 开发环境的热更新
 
 考虑分别运行上述命令比较麻烦，可以在webpack中简单运行配置命令：
 
+-------------------------------------------------------------
+### Css的处理
+
+目前的css文件是会被打包到js文件中，当js文件加载时，会创建一个style标签来生成样式
+
+对于网站会造成闪屏，性能不好： 一下回详细分析其原因：
+
+当CSS被打包到JavaScript中时，页面加载和样式应用的流程如下：
+1. 浏览器开始解析HTML，遇到<script>标签加载JavaScript文件。
+2. 加载并解析JavaScript文件。
+3. JavaScript运行后，动态生成一个<style>标签，将CSS样式插入到文档中。
+
+问题分析： 
+ 在js文件被加载和之行前，页面是没有任何样式；
+ 浏览器会处于一个短暂未应用css的页面中（通常是白板或者默认样式）；
+ 当css通过js动态插入后，页面样式会突然改变，用户感知的是一次闪屏。（称之为 未样式内容闪屏）；
+
+解决方案：
+ 1. 使用工具（如Webpack的MiniCssExtractPlugin）将CSS提取到独立的.css文件，并通过<link>标签引用。 这样可以运行在旧版本的浏览器中
+可以独立加载css并且进行处理，避免阻塞渲染。
+
+npm install --save-dev mini-css-extract-plugin
+
+需要将style-loader（所有）改为 MiniCssExtractPlugin.loader， 主要style-loader会动态创建style标签，并不需要，
+这个loader才会将css提取为单独的文件。
+
+### css兼容性处理
+
+npm i postcss-loader postcss postcss-preset-env -D
+
+需要在webpack-config.js中写这个loader配置：
+
+{   
+    loader: "postcss-loader",
+    options: {
+        postcssOptions: {
+            plugins: [
+                "postcss-preset-env" //解决大部分样式的兼容性问题
+            ]
+        }
+    }
+},
+
+需要注意的是： 这个loader智能写在 css loader之后 less loader之前
+
+并且在webpack.json中配置：兼容性做到什么程度
+
+// 交集
+"browserslist" : [
+    "last 2 version", //所有浏览器 最近的两个版本
+    ">1%",  //覆盖百分之99浏览器
+    "not dead"
+]
+
+### css压缩
+详情参见webpack官网
+npm install css-minimizer-webpack-plugin --save-dev
+
+生产模式下： html 和 js文件已经完成压缩，不需要自定义压缩；
+
+
+---------------------------------------------------------------------
+
+### webpack 高级优化 （多角度解决问题） 重要 面试 & 项目 用到
+
+### SourceMap
+开发环境中是在内存中编译打包的，我们可以直接在浏览器控制台查看源码； 提示的是编译后的代码，无法准确定义位置，不友好，需要定义到
+源代码位置，就需要利用SoureMap;
+
+可插件webpack官方文档 devtool : https://webpack.docschina.org/configuration/devtool/#root
+
+实际开发中只关注生产模式和开发模式使用那些情况：
+1. 开发者模式： cheap-module-source-map
+有点： 编译速度快，只有行映射
+缺点： 没有列映射
+
+2. 生产者模式： source-map
+优点：包含行/列映射
+缺点：打包速度慢
+
+问题： 什么是行/列映射 ？
+行映射：
+    只提供编译后代码的行号与源代码中对应位置的行号的关系。
+    在调试时，浏览器开发工具会告诉你错误或断点发生在哪一行，但无法精确到行中的具体列（字符）位置。
+    行映射适合粗略定位问题，调试简单的逻辑问题。
+列映射：
+    除了行号，还包含列号，能够精确到行中的具体字符位置。
+    更加详细，可以指明错误发生的具体变量、函数调用或操作符位置。
+    列映射适合复杂代码场景（如压缩、混淆后的代码），帮助更精确地定位问题。
+
+tips: 可以直接去到打包的html文件中打开生产模式下编译的项目
+
+
+
+
+
+
+
+
+
+
+
 
 
  

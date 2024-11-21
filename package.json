@@ -16,21 +16,32 @@
     "@babel/preset-env": "^7.26.0",
     "babel-loader": "^9.2.1",
     "css-loader": "^7.1.2",
+    "css-minimizer-webpack-plugin": "^7.0.0",
     "eslint": "^8.50.0",
     "html-webpack-plugin": "^5.6.3",
     "install": "^0.13.0",
     "less": "^4.2.0",
     "less-loader": "^12.2.0",
+    "mini-css-extract-plugin": "^2.9.2",
     "npm": "^10.9.0",
+    "postcss": "^8.4.49",
+    "postcss-loader": "^8.1.1",
+    "postcss-preset-env": "^10.1.1",
     "react-dev-utils": "^12.0.1",
     "sass": "^1.81.0",
     "sass-loader": "^16.0.3",
     "style-loader": "^4.0.0",
+    "stylus-loader": "^8.1.1",
     "webpack": "^5.96.1",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.1.0"
   },
   "dependencies": {
     "eslint-webpack-plugin": "^4.2.0"
-  }
+  },
+  "browserslist": [
+    "last 2 version",
+    ">1%",
+    "not dead"
+  ]
 }
