@@ -238,6 +238,64 @@ npm install css-minimizer-webpack-plugin --save-dev
 
 tips: 可以直接去到打包的html文件中打开生产模式下编译的项目
 
+-----------------------------------------------------------
+
+### 开发环境下 提升打包构建速度 HotMoudleReplacement
+开发环境下，webpack会讲所有模块都全部重新，编译打包，速度非常慢。
+其实 我们修改某一个模块的代码，就只有这个模块代码需要重新编译
+
+js 默认不能做到热模块替换  需要手动指定  实际开发中需要根据react 或者是 vue 的loader来解决：
+例如: vue-loader react-hot-loader  回头单独定义
+css 支持
+
+### one of
+为了是在解决处理loader轮询的问题，只要有一个loader匹配完毕，就不会继续匹配后面的处理loader
+
+### include Exclude
+对 js文件(Babel) / Eslint 处理 需要排除node_moudle下面的文件。 只处理src文件下js文件
+
+### Cache 缓存
+js文件(Babel) / Eslint 每次都需要经过Eslint和Babel检查，速度比较慢， 可以缓存其结果，保证二次打包速度更快
+
+### Tread 多进程打包
+可以开启多进程，同时处理js文件，这样速度比单进程更快，而对js 文件处理主要是 eslint babel Terser这三个工具的优化；
+
+npm i thread-loader -D (用于处理压缩的插件 开发环境不进行压缩，无需处理)
+
+### 减少代码体积 TreeSharking
+引入第三方组件库或者是函数，避免全局引入，导致整个库都被打包进来，体积就太大了。用了啥功能就引入啥功能
+
+作用： 为了一处js了没有使用到的代码，减少代码的打包体积；
+
+注意： 依赖ES Module
+
+webpack默认已经开启 自动移除没被使用的js代码；
+
+### Babel优化
+Babel会为每一个文件都插入辅助代码，导致代码体积过大，可以将这些辅助代码，变成一个独立模块，避免重复定义，直接引入模块中相同的辅助代码即可。
+
+npm i @babel/plugin-transform-runtime -D
+
+### Image Minimizer 图片压缩
+注意： 只适用于本地项目中的静态图片，如果是在线链接，就不需要；
+
+npm install image-minimizer-webpack-plugin imagemin -D
+
+支持两种模式：
+
+无损压缩： npm install imagemin-gifsicle imagemin-jpegtran imagemin-optipng imagemin-svgo --save-dev
+
+有损压缩： npm install imagemin-gifsicle imagemin-mozjpeg imagemin-pngquant imagemin-svgo --save-dev
+
+对比压缩前后图片的大小体积
+
+
+
+
+
+
+
+
 
 
 
