@@ -289,6 +289,51 @@ npm install image-minimizer-webpack-plugin imagemin -D
 
 对比压缩前后图片的大小体积
 
+### 优化代码运行性能 动态导入 important
+打包代码会将所有的js文件打包到一个文件中，体积太大，如果只需要渲染首页，那么应该只加载首页的js文件；
+不仅仅是js文件 css文件也需要按需渲染
+
+1. 代码分割技术
+多入口打包 入口文件多个 出口文件多个； 多入口对应多输出
+
+2. 公共代码只打包一份，方便复用；需要配置 参见尚硅谷文档； 在optimization中的splitChunks中进行配置，方便多个模块之间重复打包js文件。
+chunks： 指的是输入文件；
+bundle： 指的是打包后的输出文件
+
+3. 按需加载动态导入： 例如：事件js，最初用不到的资源，可以不加载，提高首屏加载的速度；
+import 动态导入： 将动态导入的文件代码分割（拆分成单独模块），会在需要时自动加载；返回的一个promise 异步操作
+
+4. 单入口，单页面应用，现在项目就是单页面应用
+来看看动态导入语法
+例子： document.getElementById("But").onClick = () => {
+    import ("./js/math").then(({mul}) => {
+        console.log(mul(1, 2));
+    })
+}
+应用非常广泛，尤其是在单页面应用中的路由导入，使用的就是这个import的语法 来实现路由的动态导入
+
+5. 给动态导入文件命名配置
+例如：
+{
+    path: '/SafetyMonitor',
+    element: lazy(() => import(/* webpackChunkName: "DocxTemplate" */ './SafetyMonitor'))
+},
+output: {
+    // path: path.resolve(__dirname, 'dist') 是指当前文件夹的目录下 新建一个dist文件夹
+    path: path.resolve(__dirname, '../dist'), // 这里喜欢使用绝对路径
+    //入口文件打包输出的文件名
+    filename: 'static/js/main.js',
+    chunkFilename: "static/js/[name].js", //给打包输出的其他文件命名
+    clean: true  // 打包前将path目录清空
+},
+
+遗留问题： 
+1. 需要处理eslint报错动态导入语法
+
+6. 统一命名配置
+详细见配置信息
+
+
 
 
 
